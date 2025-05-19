@@ -10,39 +10,47 @@ source:
   sha256: 60f55f6740b8166cf7a23da9a0f24fcb630c2313e46a04f9d51bdf7be0237a68
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: True  # [py<37]
 
 requirements:
   host:
+    - python
     - flit-core >=3.2,<4
     - pip
-    - python {{ python_min }}
   run:
+    - python
     - click >=7.1.2
-    - colorama >=0.4.3
+    - colorama >=0.4.3  # [py<310 and win]
     - deprecation-alias >=0.1.1
     - domdf-python-tools >=3.8.0
     - mistletoe >=0.7.2
-    - python >={{ python_min }}
-    - typing-extensions !=3.10.0.1,>=3.10.0.0
+    - typing-extensions >=3.10.0.0,!=3.10.0.1
+  run_constrained:
+    # terminals
+    - psutil >=5.8.0
 
+# We can`t enable pytest because conftest uses the coincidence package, which is unavailable on the main channel.
+# The policy states that packages are not specifically built for testing.
 test:
   imports:
     - consolekit
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
   requires:
     - pip
-    - python {{ python_min }}
 
 about:
   home: https://github.com/domdfcoding/consolekit
   summary: Additional utilities for click.
   license: MIT
+  license_family: MIT
   license_file: LICENSE
-  doc_url: https://consolekit.readthedocs.io/en/latest/
+  description: Additional utilities for click.
+  doc_url: https://consolekit.readthedocs.io
+  dev_url: https://github.com/domdfcoding/consolekit
 
 extra:
   recipe-maintainers:
