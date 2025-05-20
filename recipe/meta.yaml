@@ -21,7 +21,7 @@ requirements:
     - pip
   run:
     - python
-    - click >=7.1.2
+    - click >=7.1.2,<8.2
     - colorama >=0.4.3  # [py<310 and win]
     - deprecation-alias >=0.1.1
     - domdf-python-tools >=3.8.0
