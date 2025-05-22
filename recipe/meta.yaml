@@ -31,8 +31,6 @@ requirements:
     # terminals
     - psutil >=5.8.0
 
-# We can`t enable pytest because conftest uses the coincidence package, which is unavailable on the main channel.
-# The policy states that packages are not specifically built for testing.
 test:
   source_files:
     - tests
