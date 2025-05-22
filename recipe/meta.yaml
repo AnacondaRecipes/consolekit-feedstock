@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/consolekit-{{ version }}.tar.gz
-  sha256: 60f55f6740b8166cf7a23da9a0f24fcb630c2313e46a04f9d51bdf7be0237a68
+  url: https://github.com/domdfcoding/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 7c9edbde4f1880fd4c08a7f6d8b1a26a4030ecdc0464a14b60e4930d0d2a8654
 
 build:
   number: 0
@@ -34,13 +34,19 @@ requirements:
 # We can`t enable pytest because conftest uses the coincidence package, which is unavailable on the main channel.
 # The policy states that packages are not specifically built for testing.
 test:
+  source_files:
+    - tests
   imports:
     - consolekit
+  requires:
+    - pip
+    - pytest >=6.0.0
+    - coincidence >=0.1.0
+    - pytest-regressions >=2.0.2
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-  requires:
-    - pip
+    - pytest -vv tests
 
 about:
   home: https://github.com/domdfcoding/consolekit
